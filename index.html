@@ -1,238 +1,275 @@
-import React, { useState } from 'react';
-import { Heart, Sparkles, CheckCircle } from 'lucide-react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personality Match Quiz</title>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+  <div id="root"></div>
 
-const PersonalityQuiz = () => {
-  const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
+  <script type="text/babel">
+    const { useState } = React;
 
-  const questions = [
-    {
-      id: 'introvert',
-      q: "On a Friday night, what sounds most appealing?",
-      options: [
-        { text: "Cozy night in with movies and snacks", value: 5 },
-        { text: "Small gathering with close friends", value: 3 },
-        { text: "Big party or social event", value: 1 }
-      ]
-    },
-    {
-      id: 'spontaneity',
-      q: "How do you feel about spontaneous adventures?",
-      options: [
-        { text: "Love them! The more spontaneous the better", value: 5 },
-        { text: "Fun occasionally, but I like some planning", value: 3 },
-        { text: "Prefer to plan things out in advance", value: 1 }
-      ]
-    },
-    {
-      id: 'humor',
-      q: "What kind of humor makes you laugh most?",
-      options: [
-        { text: "Witty banter and clever wordplay", value: 5 },
-        { text: "Silly and goofy jokes", value: 3 },
-        { text: "Sarcasm and dry humor", value: 4 }
-      ]
-    },
-    {
-      id: 'communication',
-      q: "When something's bothering you, you usually:",
-      options: [
-        { text: "Talk about it right away", value: 5 },
-        { text: "Need some time to process first", value: 3 },
-        { text: "Try to work it out on my own", value: 1 }
-      ]
-    },
-    {
-      id: 'affection',
-      q: "How do you prefer to show affection?",
-      options: [
-        { text: "Physical touch (hugs, cuddling, etc.)", value: 5 },
-        { text: "Words of affirmation and compliments", value: 4 },
-        { text: "Acts of service and doing things for them", value: 3 }
-      ]
-    },
-    {
-      id: 'interests',
-      q: "Your ideal way to spend quality time together:",
-      options: [
-        { text: "Trying new activities or hobbies together", value: 5 },
-        { text: "Deep conversations over coffee or dinner", value: 4 },
-        { text: "Just being in the same room, doing our own things", value: 2 }
-      ]
-    },
-    {
-      id: 'conflict',
-      q: "During a disagreement, you tend to:",
-      options: [
-        { text: "Address it directly and talk it through", value: 5 },
-        { text: "Take a break and come back to it later", value: 3 },
-        { text: "Try to lighten the mood first", value: 4 }
-      ]
-    },
-    {
-      id: 'support',
-      q: "When your partner is stressed, you're most likely to:",
-      options: [
-        { text: "Listen and offer emotional support", value: 5 },
-        { text: "Try to help solve the problem", value: 4 },
-        { text: "Give them space and check in later", value: 2 }
-      ]
-    }
-  ];
+    // Simple icon components
+    const Heart = ({ className }) => (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    );
 
-  const handleAnswer = (value) => {
-    const newAnswers = { ...answers, [questions[currentQ].id]: value };
-    setAnswers(newAnswers);
+    const Sparkles = ({ className }) => (
+      <svg className={className} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+      </svg>
+    );
 
-    if (currentQ < questions.length - 1) {
-      setCurrentQ(currentQ + 1);
-    } else {
-      setShowResults(true);
-    }
-  };
+    const CheckCircle = ({ className }) => (
+      <svg className={className} fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01" fill="none" stroke="white" strokeWidth="2"/>
+      </svg>
+    );
 
-  const calculateMatch = () => {
-    const traits = {
-      introvert: answers.introvert >= 3,
-      spontaneous: answers.spontaneity >= 3,
-      communicative: answers.communication >= 4,
-      affectionate: answers.affection >= 4
+    const PersonalityQuiz = () => {
+      const [currentQ, setCurrentQ] = useState(0);
+      const [answers, setAnswers] = useState({});
+      const [showResults, setShowResults] = useState(false);
+
+      const questions = [
+        {
+          id: 'introvert',
+          q: "On a Friday night, what sounds most appealing?",
+          options: [
+            { text: "Cozy night in with movies and snacks", value: 5 },
+            { text: "Small gathering with close friends", value: 3 },
+            { text: "Big party or social event", value: 1 }
+          ]
+        },
+        {
+          id: 'spontaneity',
+          q: "How do you feel about spontaneous adventures?",
+          options: [
+            { text: "Love them! The more spontaneous the better", value: 5 },
+            { text: "Fun occasionally, but I like some planning", value: 3 },
+            { text: "Prefer to plan things out in advance", value: 1 }
+          ]
+        },
+        {
+          id: 'humor',
+          q: "What kind of humor makes you laugh most?",
+          options: [
+            { text: "Witty banter and clever wordplay", value: 5 },
+            { text: "Silly and goofy jokes", value: 3 },
+            { text: "Sarcasm and dry humor", value: 4 }
+          ]
+        },
+        {
+          id: 'communication',
+          q: "When something's bothering you, you usually:",
+          options: [
+            { text: "Talk about it right away", value: 5 },
+            { text: "Need some time to process first", value: 3 },
+            { text: "Try to work it out on my own", value: 1 }
+          ]
+        },
+        {
+          id: 'affection',
+          q: "How do you prefer to show affection?",
+          options: [
+            { text: "Physical touch (hugs, cuddling, etc.)", value: 5 },
+            { text: "Words of affirmation and compliments", value: 4 },
+            { text: "Acts of service and doing things for them", value: 3 }
+          ]
+        },
+        {
+          id: 'interests',
+          q: "Your ideal way to spend quality time together:",
+          options: [
+            { text: "Trying new activities or hobbies together", value: 5 },
+            { text: "Deep conversations over coffee or dinner", value: 4 },
+            { text: "Just being in the same room, doing our own things", value: 2 }
+          ]
+        },
+        {
+          id: 'conflict',
+          q: "During a disagreement, you tend to:",
+          options: [
+            { text: "Address it directly and talk it through", value: 5 },
+            { text: "Take a break and come back to it later", value: 3 },
+            { text: "Try to lighten the mood first", value: 4 }
+          ]
+        },
+        {
+          id: 'support',
+          q: "When your partner is stressed, you're most likely to:",
+          options: [
+            { text: "Listen and offer emotional support", value: 5 },
+            { text: "Try to help solve the problem", value: 4 },
+            { text: "Give them space and check in later", value: 2 }
+          ]
+        }
+      ];
+
+      const handleAnswer = (value) => {
+        const newAnswers = { ...answers, [questions[currentQ].id]: value };
+        setAnswers(newAnswers);
+
+        if (currentQ < questions.length - 1) {
+          setCurrentQ(currentQ + 1);
+        } else {
+          setShowResults(true);
+        }
+      };
+
+      const calculateMatch = () => {
+        const traits = {
+          introvert: answers.introvert >= 3,
+          spontaneous: answers.spontaneity >= 3,
+          communicative: answers.communication >= 4,
+          affectionate: answers.affection >= 4
+        };
+
+        return traits;
+      };
+
+      const getMatchAnalysis = () => {
+        const traits = calculateMatch();
+        const analyses = [];
+
+        if (traits.introvert) {
+          analyses.push({
+            trait: "Cozy Homebody Energy",
+            match: "Perfect match! I love quiet nights in too. We can create our own little world together with movie marathons, cooking experiments, and deep conversations without needing the whole world around us."
+          });
+        } else {
+          analyses.push({
+            trait: "Social Butterfly Spirit",
+            match: "Great balance! Your social energy complements my vibe perfectly. You'll bring me out of my shell and introduce me to new experiences, while I'll be your peaceful home base."
+          });
+        }
+
+        if (traits.spontaneous) {
+          analyses.push({
+            trait: "Adventurous Soul",
+            match: "Love this! Your spontaneity will keep life exciting. I'll plan the framework and you'll add the surprise elements - we'll have the best of both worlds."
+          });
+        } else {
+          analyses.push({
+            trait: "Thoughtful Planner",
+            match: "We're so aligned! I appreciate someone who thinks ahead. Together we can plan amazing experiences and actually follow through on all those 'we should do this someday' ideas."
+          });
+        }
+
+        if (traits.communicative) {
+          analyses.push({
+            trait: "Open Communicator",
+            match: "This is huge! I value honest communication so much. We'll be able to talk through anything, grow together, and never let things fester. No games, just real connection."
+          });
+        }
+
+        if (traits.affectionate) {
+          analyses.push({
+            trait: "Warm & Affectionate",
+            match: "My favorite quality! I'm all about those little moments of affection - holding hands, random hugs, cuddles on the couch. We'll never run out of ways to show each other we care."
+          });
+        }
+
+        return analyses;
+      };
+
+      const restart = () => {
+        setCurrentQ(0);
+        setAnswers({});
+        setShowResults(false);
+      };
+
+      if (showResults) {
+        const matchAnalysis = getMatchAnalysis();
+        
+        return (
+          <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 p-6 flex items-center justify-center">
+            <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
+              <div className="text-center mb-8">
+                <Heart className="w-16 h-16 text-pink-500 mx-auto mb-4 animate-pulse" />
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">Your Perfect Match Profile!</h2>
+                <p className="text-gray-600">Here's why we're meant to be together...</p>
+              </div>
+
+              <div className="space-y-6 mb-8">
+                {matchAnalysis.map((item, idx) => (
+                  <div key={idx} className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 border-2 border-pink-200">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
+                      <div>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.trait}</h3>
+                        <p className="text-gray-700 leading-relaxed">{item.match}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl p-6 text-white text-center mb-6">
+                <CheckCircle className="w-12 h-12 mx-auto mb-3" />
+                <h3 className="text-2xl font-bold mb-2">100% Compatible! 💕</h3>
+                <p className="text-lg">Every answer shows how perfectly you fit into my life. You bring out the best in me, and I can't wait to continue building our story together.</p>
+              </div>
+
+              <button
+                onClick={restart}
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-xl transition"
+              >
+                Take Quiz Again
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 p-6 flex items-center justify-center">
+          <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
+            <div className="mb-8">
+              <div className="flex items-center justify-between mb-4">
+                <Heart className="w-8 h-8 text-pink-500" />
+                <span className="text-sm font-medium text-gray-500">
+                  Question {currentQ + 1} of {questions.length}
+                </span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
+                />
+              </div>
+            </div>
+
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              {questions[currentQ].q}
+            </h2>
+
+            <div className="space-y-3">
+              {questions[currentQ].options.map((option, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => handleAnswer(option.value)}
+                  className="w-full text-left p-5 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-transparent hover:border-pink-300 transition transform hover:scale-105"
+                >
+                  <span className="text-lg text-gray-800">{option.text}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
     };
 
-    return traits;
-  };
-
-  const getMatchAnalysis = () => {
-    const traits = calculateMatch();
-    const analyses = [];
-
-    if (traits.introvert) {
-      analyses.push({
-        trait: "Cozy Homebody Energy",
-        match: "Perfect match! I love quiet nights in too. We can create our own little world together with movie marathons, cooking experiments, and deep conversations without needing the whole world around us."
-      });
-    } else {
-      analyses.push({
-        trait: "Social Butterfly Spirit",
-        match: "Great balance! Your social energy complements my vibe perfectly. You'll bring me out of my shell and introduce me to new experiences, while I'll be your peaceful home base."
-      });
-    }
-
-    if (traits.spontaneous) {
-      analyses.push({
-        trait: "Adventurous Soul",
-        match: "Love this! Your spontaneity will keep life exciting. I'll plan the framework and you'll add the surprise elements - we'll have the best of both worlds."
-      });
-    } else {
-      analyses.push({
-        trait: "Thoughtful Planner",
-        match: "We're so aligned! I appreciate someone who thinks ahead. Together we can plan amazing experiences and actually follow through on all those 'we should do this someday' ideas."
-      });
-    }
-
-    if (traits.communicative) {
-      analyses.push({
-        trait: "Open Communicator",
-        match: "This is huge! I value honest communication so much. We'll be able to talk through anything, grow together, and never let things fester. No games, just real connection."
-      });
-    }
-
-    if (traits.affectionate) {
-      analyses.push({
-        trait: "Warm & Affectionate",
-        match: "My favorite quality! I'm all about those little moments of affection - holding hands, random hugs, cuddles on the couch. We'll never run out of ways to show each other we care."
-      });
-    }
-
-    return analyses;
-  };
-
-  const restart = () => {
-    setCurrentQ(0);
-    setAnswers({});
-    setShowResults(false);
-  };
-
-  if (showResults) {
-    const matchAnalysis = getMatchAnalysis();
-    
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 p-6 flex items-center justify-center">
-        <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
-          <div className="text-center mb-8">
-            <Heart className="w-16 h-16 text-pink-500 mx-auto mb-4 animate-pulse" />
-            <h2 className="text-3xl font-bold text-gray-800 mb-2">Your Perfect Match Profile!</h2>
-            <p className="text-gray-600">Here's why we're meant to be together...</p>
-          </div>
-
-          <div className="space-y-6 mb-8">
-            {matchAnalysis.map((item, idx) => (
-              <div key={idx} className="bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 border-2 border-pink-200">
-                <div className="flex items-start gap-3">
-                  <Sparkles className="w-6 h-6 text-purple-500 flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{item.trait}</h3>
-                    <p className="text-gray-700 leading-relaxed">{item.match}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl p-6 text-white text-center mb-6">
-            <CheckCircle className="w-12 h-12 mx-auto mb-3" />
-            <h3 className="text-2xl font-bold mb-2">100% Compatible! 💕</h3>
-            <p className="text-lg">Every answer shows how perfectly you fit into my life. You bring out the best in me, and I can't wait to continue building our story together.</p>
-          </div>
-
-          <button
-            onClick={restart}
-            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-xl transition"
-          >
-            Take Quiz Again
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 p-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl p-8">
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <Heart className="w-8 h-8 text-pink-500" />
-            <span className="text-sm font-medium text-gray-500">
-              Question {currentQ + 1} of {questions.length}
-            </span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((currentQ + 1) / questions.length) * 100}%` }}
-            />
-          </div>
-        </div>
-
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">
-          {questions[currentQ].q}
-        </h2>
-
-        <div className="space-y-3">
-          {questions[currentQ].options.map((option, idx) => (
-            <button
-              key={idx}
-              onClick={() => handleAnswer(option.value)}
-              className="w-full text-left p-5 rounded-xl bg-gradient-to-r from-pink-50 to-purple-50 hover:from-pink-100 hover:to-purple-100 border-2 border-transparent hover:border-pink-300 transition transform hover:scale-105"
-            >
-              <span className="text-lg text-gray-800">{option.text}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default PersonalityQuiz;
+    ReactDOM.render(<PersonalityQuiz />, document.getElementById('root'));
+  </script>
+</body>
+</html>
